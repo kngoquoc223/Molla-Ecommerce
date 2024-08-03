@@ -47,11 +47,10 @@
                                     <input name="description" type="text" class="form-control" placeholder="" value="{{old('description', $categoryProduct->description ?? '')}}">
                                   </div>
                                 </div>
-                                @if($config['method'] == 'create')
                                 <div class="form-row">
                                   <div class="form-group col-md-6">
                                     <label class="control-lable text-left">Loại Danh Mục</label>
-                                    <select name="parent_id" class="form-control">
+                                    <select {{$config['method'] == 'edit' ?'disabled':''}} name="parent_id" class="form-control">
                                       <option value="0" {{old('parent_id')==0 ? 'selected': ''}} >--root</option>
                                       @if(isset($parentCategorys))
                                       @foreach($parentCategorys as $parentCategory)
@@ -64,7 +63,6 @@
                                     </select>
                                   </div>
                                 </div>
-                                @endif
                                 <div class="form-row">
                                   <div class="form-group col-md-12">
                                     <label for="" class="control-lable text-left">Banner</label>

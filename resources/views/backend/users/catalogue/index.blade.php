@@ -4,7 +4,16 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">{{$config['seo']['index']['tableHeading']}}</h6>
-            @include('backend.dashboard.component.toolbox', ['model' => 'UserCatalogue'])
+            <div class="ibox-tools">
+                <a class="collapse-link" href="#collapseCardExample" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                    <i class="setfa fa fa-chevron-down"></i>
+                </a>
+            </div>
+            <script>
+                  $('.collapse-link').on('click', function () {
+                    $('.setfa').toggleClass('fa-chevron-down').toggleClass('fa-chevron-up')
+                });
+            </script>
         </div>
         <div class="collapse show" id="collapseCardExample">
             <div class="card-body">

@@ -108,7 +108,7 @@
                     '_token': _token
                 }
                 if(option['model']=='UserCatalogue'){
-                    if(option['modelId']==1 || option['modelId']==2){
+                    if(option['modelId']==1 || option['modelId']==2 || option['modelId']==3){
                         Swal.fire({
                             title: "Cập nhật tình trạng thất bại!!",
                             html: '<span class="text-danger">(*)</span>: Đăng nhập hệ thống để thao tác nhóm này.',

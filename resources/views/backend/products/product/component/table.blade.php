@@ -122,10 +122,17 @@
                                 });
                                 location.reload();
                         }else{
-                            Swal.fire({
+                            if(res.messenger != undefined){
+                                Swal.fire({
+                                icon: "error",
+                                title: res.messenger,
+                                });
+                            }else{
+                                Swal.fire({
                                 icon: "error",
                                 title: "Xóa bản ghi không thành công.Vui lòng thử lại",
                                 });
+                            }
                         }
                     },
                     error:function(jqXHR, textStatus, errorThrown){

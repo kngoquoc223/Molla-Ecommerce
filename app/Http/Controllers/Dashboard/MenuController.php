@@ -15,6 +15,7 @@ use App\Services\Interfaces\MenuServiceInterface as MenuService;
 use App\Repositories\Interfaces\MenuRepositoryInterface as MenuRepository;
 use Symfony\Component\CssSelector\Node\FunctionNode;
 use App\Http\Requests\StoreMenuRequest;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
@@ -75,12 +76,17 @@ class MenuController extends Controller
         ));
     }
     public function store(StoreMenuRequest $request){
-        if($this->menuService->create($request)){
-            toastr()->success('Thêm mới thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->menuService->create($request)){
+                toastr()->success('Thêm mới thành công.');
+                return redirect()->route('menu.index');
+            }
+            toastr()->error('Thêm mới không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('menu.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.'); 
             return redirect()->route('menu.index');
         }
-        toastr()->error('Thêm mới không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('menu.index');
     }
     public function edit($id){
         $menu=$this->menuRepository->findById($id);
@@ -105,19 +111,28 @@ class MenuController extends Controller
         ));
     }
     public function update($id, StoreMenuRequest $request){
-        if($this->menuService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->menuService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('menu.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('menu.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.'); 
             return redirect()->route('menu.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('menu.index');
     }
     public function destroy(Request $request){
-        $get=$request->input();
-        if($this->menuService->delete($get['id'])){
-            return response()->json(['flag' => true]);
+        if(Auth::user()->user_catalogue_id == 1){
+            $get=$request->input();
+            if($this->menuService->delete($get['id'])){
+                return response()->json(['flag' => true]);
+            }
+            return response()->json(['flag' => false]);
+        }else{
+            return response()->json(['flag' => false,'messenger' => 'Đăng nhập quyền hệ thống để thực hiện chức năng này.']);
         }
-        return response()->json(['flag' => false]);
     }
     private function config(){
         return [

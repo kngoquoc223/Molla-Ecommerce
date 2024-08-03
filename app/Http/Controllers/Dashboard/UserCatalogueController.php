@@ -15,6 +15,7 @@ use App\Services\Interfaces\UserCatalogueServiceInterface as UserCatalogueServic
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 use Symfony\Component\CssSelector\Node\FunctionNode;
 use App\Http\Requests\StoreUserCatalogueRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserCatalogueController extends Controller
 {
@@ -105,12 +106,17 @@ class UserCatalogueController extends Controller
         ));
     }
     public function update($id, StoreUserCatalogueRequest $request){
-        if($this->userCatalogueService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->userCatalogueService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('user.catalogue.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('user.catalogue.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('user.catalogue.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('user.catalogue.index');
     }
     public function delete($id){
         $config=[
@@ -129,7 +135,7 @@ class UserCatalogueController extends Controller
         ));
     }
     public function destroy($id){
-        if($id != 1 && $id != 2){
+        if($id != 1 && $id != 2 && $id != 3){
             if($this->userCatalogueService->delete($id)){
                 toastr()->success('Xóa bản ghi thành công.');
                 return redirect()->route('user.catalogue.index');
@@ -137,7 +143,7 @@ class UserCatalogueController extends Controller
             toastr()->error('Xóa bản ghi không thành công. Vui lòng thử lại.'); 
             return redirect()->route('user.catalogue.index');
         }else{
-            toastr()->error('Đăng nhập quyền hệ thống để xóa nhóm này.');
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('user.catalogue.index');
         }
     }

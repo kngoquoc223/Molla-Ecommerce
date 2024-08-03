@@ -9,6 +9,7 @@ use App\Models\ProductImage;
 use App\Models\Product;
 use App\Repositories\Interfaces\ProductImageRepositoryInterface as ProductImageRepository;
 use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
+use Illuminate\Support\Facades\Auth;
 
 
 class UploadController extends Controller
@@ -48,19 +49,28 @@ class UploadController extends Controller
            ));
         }
         public function updateImage($id, Request $request){
-            if($this->uploadService->update($id, $request)){
-                toastr()->success('Cập nhật bản ghi thành công.');
+            if(Auth::user()->user_catalogue_id == 1){
+                if($this->uploadService->update($id, $request)){
+                    toastr()->success('Cập nhật bản ghi thành công.');
+                    return redirect()->route('product.index');
+                }
+                toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+                return redirect()->route('product.index');
+            }else{
+                toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
                 return redirect()->route('product.index');
             }
-            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-            return redirect()->route('product.index');
         }
         public function destroyImage(Request $request){
-            $get=$request->input();
-            if($this->uploadService->delete($get['id'])){
-                return response()->json(['flag' => true]);
+            if(Auth::user()->user_catalogue_id == 1){
+                $get=$request->input();
+                if($this->uploadService->delete($get['id'])){
+                    return response()->json(['flag' => true]);
+                }
+                return response()->json(['flag' => false]);
+            }else{
+                return response()->json(['flag' => false,'messenger' => 'Đăng nhập quyền hệ thống để thực hiện chức năng này.']);
             }
-            return response()->json(['flag' => false]);
         }
         public function store(Request $request){
            $url= $this->uploadService->store($request);

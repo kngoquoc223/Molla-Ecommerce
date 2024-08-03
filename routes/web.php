@@ -180,7 +180,7 @@ Route::group(['prefix' => 'admin'], function () {
     // ajax
     Route::get('ajax/category/getCategory', [getCategoryProductController::class, 'getCategory'])->name('ajax.category.index')->middleware(AuthCheck::class);
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index')->middleware(AuthCheck::class);
-    Route::get('{id}/ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index')->middleware(AuthCheck::class);
+    Route::get('{id}/ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location1.index')->middleware(AuthCheck::class);
     Route::post('ajax/dashboard/changeStatus', [DashboardController::class, 'changeStatus'])->name('ajax.dashboard.changeStatus')->middleware(AuthCheck::class);
     Route::post('ajax/dashboard/changeStatusAll', [DashboardController::class, 'changeStatusAll'])->name('ajax.dashboard.changeStatusAll')->middleware(AuthCheck::class);
 });

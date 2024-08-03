@@ -52,9 +52,9 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label class="control-lable text-left">Chọn nhóm thành viên<span class="text-danger">(*)</span></label>
-                                        <select  {{($config['method'] == 'edit')?'disabled':''}} name="user_catalogue_id" class="form-control setupSelect2">
+                                        <select {{($config['method'] == 'edit')?'disabled':''}} name="user_catalogue_id" class="form-control setupSelect2">
                                           @foreach ($userCatalogues as $item)           
-                                          <option @if(old('user_catalogue_id',$user->user_catalogue_id ?? '') == $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                                          <option {{Auth::user()->user_catalogue_id == 1 ? '' : ($item->id == 1 ? 'disabled' : '') }} @if(old('user_catalogue_id',$user->user_catalogue_id ?? '') == $item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
                                           @endforeach
                                         </select>
                                       </div>

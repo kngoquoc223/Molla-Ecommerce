@@ -109,15 +109,20 @@ class CategoryPostsController extends Controller
         ));
     }
     public function update($id, UpdateCategoryPostsRequest $request){
-        if($this->categoryPostsService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->categoryPostsService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('categoryPosts.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('categoryPosts.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('categoryPosts.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('categoryPosts.index');
     }
     public function destroy(Request $request){
-        if(Auth::id()==1){
+        if(Auth::user()->user_catalogue_id == 1){
             $get=$request->input();
             if($this->categoryPostsService->delete($get['id'])){
                 return response()->json(['flag' => true]);

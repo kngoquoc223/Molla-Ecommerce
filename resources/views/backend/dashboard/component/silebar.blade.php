@@ -75,6 +75,5 @@
                 </div>
     
                 <!-- Sidebar Message -->
-    
     <!-- End of Sidebar -->
 </ul>

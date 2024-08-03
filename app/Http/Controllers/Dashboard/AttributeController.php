@@ -65,7 +65,7 @@ class AttributeController extends Controller
         ));
     }
     public function store(StoreAttributeRequest $request){
-        if(Auth::id()==1){
+        if(Auth::user()->user_catalogue_id == 1){
             if($this->attributeService->create($request)){
                 toastr()->success('Thêm mới thành công.');
                 return redirect()->route('attribute.catalogue.index');
@@ -99,12 +99,17 @@ class AttributeController extends Controller
         ));
     }
     public function update($id, UpdateAttributeRequest $request){
-        if($this->attributeService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->attributeService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('attribute.catalogue.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
             return redirect()->route('attribute.catalogue.index');
+        }else{
+                toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.'); 
+                return redirect()->route('attribute.catalogue.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('attribute.catalogue.index');
     }
     public function delete($id){
         $config=[
@@ -123,7 +128,7 @@ class AttributeController extends Controller
         ));
     }
     public function destroy($id){
-        if(Auth::id() == 1){
+        if(Auth::user()->user_catalogue_id== 1){
             if($this->attributeService->delete($id)){
                 toastr()->success('Xóa bản ghi thành công.');
                 return redirect()->route('attribute.catalogue.index');

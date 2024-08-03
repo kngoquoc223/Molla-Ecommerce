@@ -30,7 +30,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone'=>$request->phone,
-            'user_catalogue_id' => 1,
+            'user_catalogue_id' => 3,
             'publish' => 2,
         ]);
         $credentials = $request->only('email', 'password');
@@ -43,7 +43,11 @@ class AuthController extends Controller
         return view('backend.auth.login');
     }
     public function login(AuthLoginRequest $request){
-        if (Auth::attempt(['email' => $request->email,'password' => $request->password ,'user_catalogue_id' => 1,'publish' => 2])){
+            if(Auth::attempt(['email' => $request->email,'password' => $request->password ,'user_catalogue_id' => 1,'publish' => 2])){
+                toastr()->success('Đăng nhập thành công.');
+                return redirect()->route('show-dashboard');
+            }
+            else if(Auth::attempt(['email' => $request->email,'password' => $request->password ,'user_catalogue_id' => 3,'publish' => 2])){
                 toastr()->success('Đăng nhập thành công.');
                 return redirect()->route('show-dashboard');
             }

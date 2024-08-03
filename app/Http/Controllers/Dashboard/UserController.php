@@ -22,6 +22,7 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 use App\Http\Requests\UpdateInfoUserRequest;
 use App\Http\Requests\UpdateEmailUserRequest;
 use App\Http\Requests\UpdatePasswordUserRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -181,12 +182,17 @@ class UserController extends Controller
         ));
     }
     public function update($id, UpdateUserRequest $request){
-        if($this->userService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->userService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('user.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('user.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('user.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('user.index');
     }
     public function delete($id){
         $config=[

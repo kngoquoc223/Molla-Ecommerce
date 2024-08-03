@@ -87,12 +87,17 @@ class CategoryProduct extends Controller
         ));
     }
     public function store(StoreCategoryProductRequest $request){
-        if($this->categoryProductService->create($request)){
-            toastr()->success('Thêm mới thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->categoryProductService->create($request)){
+                toastr()->success('Thêm mới thành công.');
+                return redirect()->route('categoryProduct.index');
+            }
+            toastr()->error('Thêm mới không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('categoryProduct.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.'); 
             return redirect()->route('categoryProduct.index');
         }
-        toastr()->error('Thêm mới không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('categoryProduct.index');
     }
     public function edit($id){
         $categoryProduct=$this->categoryProductRepository->findById($id);
@@ -118,12 +123,17 @@ class CategoryProduct extends Controller
         ));
     }
     public function update($id, UpdateCategoryProductRequest $request){
-        if($this->categoryProductService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->categoryProductService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('categoryProduct.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('categoryProduct.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.'); 
             return redirect()->route('categoryProduct.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('categoryProduct.index');
     }
     public function delete($id){
         $config=[
@@ -159,7 +169,7 @@ class CategoryProduct extends Controller
 
     }
     public function destroy($id){
-        if(Auth::id()==1){
+        if(Auth::user()->user_catalogue_id == 1){
             if($this->categoryProductService->delete($id)){
                 toastr()->success('Xóa bản ghi thành công.');
                 return redirect()->route('categoryProduct.index');

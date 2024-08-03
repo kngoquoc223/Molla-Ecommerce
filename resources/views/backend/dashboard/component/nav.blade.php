@@ -6,12 +6,6 @@
     </button>
 
     <!-- Topbar Search -->
-    <a href="{{route('home.index')}}" class="btn btn-light btn-icon-split">
-        <span class="icon text-gray-600">
-            <i class="fas fa-arrow-left"></i>
-        </span>
-        <span class="text">Quay về trang chủ</span>
-    </a>
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
 

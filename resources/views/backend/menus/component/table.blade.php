@@ -26,10 +26,10 @@
                 type="checkbox" value="{{$menu->publish}}" {{($menu->publish==2) ? 'checked' :''}} 
                 data-modelId="{{$menu->id}}">
             </td>
-            {{-- <td class="text-center">
+            <td class="text-center">
                 <a href="{{route('menu.edit', $menu->id)}}"  class="btn btn-primary btn-circle"><i class="far fa-edit"></i></a>
                 <button data-name="{{$menu->name}}" data-code="{{$menu->id}}" class="btn btn-danger btn-circle menu-remove"><i class="fas fa-trash-alt"></i></button>
-            </td> --}}
+            </td>
         </tr>
         @endforeach
         @endif
@@ -67,11 +67,19 @@
                                 icon: "success"
                                 });
                                 location.reload();
+                                
                         }else{
-                            Swal.fire({
+                            if(res.messenger != undefined){
+                                Swal.fire({
+                                icon: "error",
+                                title: res.messenger,
+                                });
+                            }else{
+                                Swal.fire({
                                 icon: "error",
                                 title: "Xóa bản ghi không thành công.Vui lòng thử lại",
                                 });
+                            }
                         }
                     },
                     error:function(jqXHR, textStatus, errorThrown){

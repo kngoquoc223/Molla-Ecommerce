@@ -73,7 +73,7 @@ class AttributeValueController extends Controller
         ));
     }
     public function store(StoreAttributeValueRequest $request){
-        if(Auth::id()==1){
+        if(Auth::user()->user_catalogue_id == 1){
             if($this->attributeValueService->create($request)){
                 toastr()->success('Thêm mới thành công.');
                 return redirect()->route('attribute.index');
@@ -109,12 +109,17 @@ class AttributeValueController extends Controller
         ));
     }
     public function update($id, UpdateAttributeValueRequest $request){
-        if($this->attributeValueService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->attributeValueService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('attribute.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('attribute.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('attribute.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('attribute.index');
     }
     public function delete($id){
         $config=[
@@ -133,7 +138,7 @@ class AttributeValueController extends Controller
         ));
     }
     public function destroy($id){
-        if(Auth::id()==1){
+        if(Auth::user()->user_catalogue_id == 1){
             if($this->attributeValueService->delete($id)){
                 toastr()->success('Xóa bản ghi thành công.');
                 return redirect()->route('attribute.index');

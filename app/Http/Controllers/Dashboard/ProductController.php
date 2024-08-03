@@ -25,6 +25,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Models\CategoryProduct as ModelsCategoryProduct;
 use App\Services\ProductAttrService as ProductAttrService;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductController extends Controller
@@ -153,12 +154,17 @@ class ProductController extends Controller
         ));
     }
     public function update($id, UpdateProductRequest $request){
-        if($this->ProductService->update($id, $request)){
-            toastr()->success('Cập nhật bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->ProductService->update($id, $request)){
+                toastr()->success('Cập nhật bản ghi thành công.');
+                return redirect()->route('product.index');
+            }
+            toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('product.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('product.index');
         }
-        toastr()->error('Cập nhật bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('product.index');
     }
     public function delete($id){
         $config=[
@@ -177,12 +183,17 @@ class ProductController extends Controller
         ));
     }
     public function destroy($id){
-        if($this->ProductService->delete($id)){
-            toastr()->success('Xóa bản ghi thành công.');
+        if(Auth::user()->user_catalogue_id == 1){
+            if($this->ProductService->delete($id)){
+                toastr()->success('Xóa bản ghi thành công.');
+                return redirect()->route('product.index');
+            }
+            toastr()->error('Xóa bản ghi không thành công. Vui lòng thử lại.'); 
+            return redirect()->route('product.index');
+        }else{
+            toastr()->error('Đăng nhập quyền hệ thống để thực hiện chức năng này.');
             return redirect()->route('product.index');
         }
-        toastr()->error('Xóa bản ghi không thành công. Vui lòng thử lại.'); 
-        return redirect()->route('product.index');
     }
     private function config(){
         return [
